@@ -7,8 +7,13 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import butterknife.*;
 
 import com.mrtry.mediaplayer.R;
+
+import java.util.Date;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -23,6 +28,8 @@ public class MainFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private Unbinder unbinder;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -52,6 +59,7 @@ public class MainFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,13 +67,27 @@ public class MainFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
+
+    @BindView(R.id.textView2) TextView mTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main, container, false);
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
+        unbinder = ButterKnife.bind(this, view);
+
+        mTextView.setText("Hello ButterKnife!");
+
+        return view;
+    }
+
+
+    @OnClick(R.id.button2)
+    void setTimestamp() {
+        mTextView.setText(new Date().toString());
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -78,19 +100,18 @@ public class MainFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }*/
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     /**
